@@ -2,22 +2,27 @@ import 'package:flutter/material.dart';
 class ColorSelect {
   static const  orange =  Color(0xFFFE9F64);
 
-  static const  blueFacebook =  Color(0x111675D1);
+  static const  blueFacebook =  Color(0xff1675D1);
 
-  static const black = Color(0x3333333D);
+  static const black = Color(0xff33333D);
 
-  static const grey2 = Color(0x77707070);
+  static const black2 = Color(0xff46474B);
 
-  static const blue1 = Color(0x333D60CB);
+  static const grey2 = Color(0xff707070);
 
-  static const blue2 = Color(0x000A2CC4);
+  static const blue1 = Color(0xff3D60CB);
 
-  static const grey3 = Color(0x4446474B);
+  static const blue2 = Color(0xff0A2CC4);
+
+  static const grey3 = Color(0xff46474B);
+
 
   static const white = Color(0xFFFFFFFF);
 
-  static const grey1 = Color(0xDDDEDEDE);
+  static const white2 = Color.fromARGB(166, 255, 255, 255);
 
-  static const aquaGreen = Color(0x2220B780);
+  static const grey1 = Color(0xffDEDEDE);
+
+  static const aquaGreen = Color(0xff20B780);
 
 }

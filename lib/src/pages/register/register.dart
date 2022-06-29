@@ -1,5 +1,8 @@
 import 'package:basic_market/src/styles/colors_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../services/firebase_service.dart';
 // import 'package:flutter/src/material/ink_decoration.dart';
 // import 'package:flutter/cupertino.dart';
 
@@ -14,15 +17,17 @@ class _RegisterState extends State<Register> {
   var emailAddressController = TextEditingController();
   var passwordController = TextEditingController();
   bool _isHide = true;
+  FirebaseService service = FirebaseService();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: ColorSelect.white,
-        // elevation: 0,
-        // toolbarHeight: 50,
+        elevation: 0,
+        toolbarHeight: 50,
         leading: IconButton(
           onPressed: () => {},
           icon: const Icon(
@@ -50,7 +55,7 @@ class _RegisterState extends State<Register> {
                   width: 200,
                   height: 80,
                 ),
-                const Padding(padding: EdgeInsets.only(top: 15)),
+                const Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
                   'Registro',
                   style: _textStyle(bold: false, size: 30, numColor: 1),
@@ -59,9 +64,9 @@ class _RegisterState extends State<Register> {
             ),
             Container(
               //color: Colors.amber,
-              margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+              margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
               width: double.infinity,
-              height: 280,
+              height: 272,
               child: Column(
                 children: [
                   _textField(field: 'Correo electrónico'),
@@ -92,6 +97,7 @@ class _RegisterState extends State<Register> {
               ),
             ),
             Container(
+              //color: Colors.amberAccent,
               // width: 250,
               // height: 250,
               //color: Colors.red,
@@ -107,7 +113,57 @@ class _RegisterState extends State<Register> {
                     //color: Colors.green,
                     width: 160,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        try {
+                          await service.signInwithGoogle();
+                          User? user = FirebaseAuth.instance.currentUser;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Autenticación Exitosa'),
+                                  content: Text(
+                                    user!.email.toString() +
+                                        "\n" +
+                                        user.displayName.toString(),
+                                    style: _textStyle(
+                                        bold: true, size: 20, numColor: 1),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await service.signOutFromGoogle();
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        },
+                                        child: const Text('Ok'))
+                                  ],
+                                );
+                              });
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Algo salio mal'),
+                                    content:
+                                        const Text('No fue posible autenticar'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                          child: const Text('Ok'))
+                                    ],
+                                  );
+                                });
+                          }
+                        }
+                      },
                       child: Ink(
                         color: ColorSelect.white,
                         child: Padding(
@@ -136,7 +192,56 @@ class _RegisterState extends State<Register> {
                     height: 45,
                     //color: Colors.green,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        try {
+                          print('button facebook');
+                          await service.signInWithFacebook();
+                          User? user = FirebaseAuth.instance.currentUser;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Autenticación Exitosa'),
+                                  content: Text(
+                                    user!.displayName.toString(),
+                                    style: _textStyle(
+                                        bold: true, size: 20, numColor: 1),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await service.signOutFromFacebook();
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        },
+                                        child: const Text('Ok'))
+                                  ],
+                                );
+                              });
+                        } catch (e) {
+                          if (e is FirebaseAuthException) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Algo salio mal'),
+                                    content:
+                                        const Text('No fue posible autenticar'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                          child: const Text('Ok'))
+                                    ],
+                                  );
+                                });
+                          }
+                        }
+                      },
                       style: ButtonStyle(
                           // backgroundColor: MaterialStateProperty.all(
                           //     const Color.fromRGBO(22, 117, 209, 1.0)),
@@ -172,12 +277,13 @@ class _RegisterState extends State<Register> {
                         ),
                         const SizedBox(width: 12),
                         TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'Ingresar',
-                              style: _textStyle(
-                                  bold: false, size: 12, numColor: 1),
-                            ))
+                          onPressed: () {},
+                          child: Text(
+                            'Ingresar',
+                            style:
+                                _textStyle(bold: false, size: 12, numColor: 1),
+                          ),
+                        )
                       ],
                     ),
                   )
@@ -192,23 +298,12 @@ class _RegisterState extends State<Register> {
 
   TextField _textField({required String field}) {
     return TextField(
-      textAlign: TextAlign.end,
-      style: _textStyle(bold: false, size: 13, numColor: 2),
+      //textAlign: TextAlign.end,
+      style: _textStyle(bold: false, size: 13, numColor: 1),
       controller: emailAddressController,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        suffixIcon: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 10),
-          child: Row(
-            children: [
-              const Padding(padding: EdgeInsets.only(left: 10)),
-              const Icon(Icons.email_outlined),
-              const Padding(padding: EdgeInsets.only(left: 12)),
-              Text(field)
-            ],
-          ),
-        ),
-        //icon: const Icon(Icons.email_outlined),
+        prefixIcon: const Icon(Icons.email_outlined),
         border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(8))),
         // border: const OutlineInputBorder(
@@ -220,33 +315,42 @@ class _RegisterState extends State<Register> {
 
   TextField _textFieldPassword({required String field}) {
     return TextField(
+      style: _textStyle(bold: false, size: 13, numColor: 1),
       obscureText: _isHide,
       controller: passwordController,
       decoration: InputDecoration(
-        //labelText: field,
-        border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8))),
-        suffixIcon: Padding(
-          padding: const EdgeInsetsDirectional.only(start: 10),
-          child: Row(
-            children: [
-              //const Padding(padding: EdgeInsets.only(left: 5)),
-              IconButton(
-                icon: Icon(_isHide ? Icons.lock_open : Icons.lock_outline),
-                onPressed: () {
-                  setState(
-                    () {
-                      _isHide = !_isHide;
-                    },
-                  );
-                },
-              ),
-              //const Padding(padding: EdgeInsets.only(left: 5)),
-              Text(field)
-            ],
+          prefixIcon: IconButton(
+            icon: Icon(_isHide ? Icons.lock_open : Icons.lock_outline),
+            onPressed: () {
+              setState(() {
+                _isHide = !_isHide;
+              });
+            },
           ),
-        ),
-      ),
+          //labelText: field,
+          border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          // suffixIcon: Padding(
+          //   padding: const EdgeInsetsDirectional.only(start: 10),
+          //   child: Row(
+          //     children: [
+          //       //const Padding(padding: EdgeInsets.only(left: 5)),
+          //       IconButton(
+          //         icon: Icon(_isHide ? Icons.lock_open : Icons.lock_outline),
+          //         onPressed: () {
+          //           setState(
+          //             () {
+          //               _isHide = !_isHide;
+          //             },
+          //           );
+          //         },
+          //       ),
+          //       //const Padding(padding: EdgeInsets.only(left: 5)),
+          //       Text(field)
+          //     ],
+          //   ),
+          // ),
+          hintText: field),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:basic_market/src/pages/login/login.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,10 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   var emailAddressController = TextEditingController();
   var passwordController = TextEditingController();
+  var passwordconfirmController = TextEditingController();
   bool _isHide = true;
+  bool _isHide2 = true;
   FirebaseService service = FirebaseService();
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class _RegisterState extends State<Register> {
         elevation: 0,
         toolbarHeight: 50,
         leading: IconButton(
-          onPressed: () => {},
+          onPressed: () => {Navigator.pop(context)},
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             color: ColorSelect.black,
@@ -40,7 +42,7 @@ class _RegisterState extends State<Register> {
       body: Container(
         margin: const EdgeInsets.only(top: 1),
         color: ColorSelect.white,
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         //color: Colors.amberAccent,
         child: SafeArea(
             child: Column(
@@ -52,10 +54,10 @@ class _RegisterState extends State<Register> {
                 Image.asset(
                   'assets/images/basic_market_logo.png',
                   fit: BoxFit.fill,
-                  width: 200,
+                  //width: 200,
                   height: 80,
                 ),
-                const Padding(padding: EdgeInsets.only(top: 10)),
+                //const Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
                   'Registro',
                   style: _textStyle(bold: false, size: 30, numColor: 1),
@@ -65,31 +67,131 @@ class _RegisterState extends State<Register> {
             Container(
               //color: Colors.amber,
               margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
-              width: double.infinity,
+              width: MediaQuery.of(context).size.width * 0.85,
               height: 272,
               child: Column(
                 children: [
                   _textField(field: 'Correo electrónico'),
-                  const Padding(padding: EdgeInsets.only(top: 17)),
-                  _textFieldPassword(field: 'Contraseña'),
-                  const Padding(padding: EdgeInsets.only(top: 17)),
-                  _textFieldPassword(field: 'Confirmar contraseña'),
-                  const Padding(padding: EdgeInsets.only(top: 25)),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(ColorSelect.orange),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3)))),
-                      child: Text("Crear cuenta",
-                          style:
-                              _textStyle(bold: false, size: 25, numColor: 5)),
+                  Container(
+                      margin: const EdgeInsets.only(top: 17),
+                      child: _textFieldPassword(field: 'Contraseña')),
+                  Container(
+                      margin: const EdgeInsets.only(top: 17),
+                      child: _textFieldPasswordConfirm(
+                          field: 'Confirmar contraseña')),
+                  //const Padding(padding: EdgeInsets.only(top: 25)),
+                  Container(
+                    margin: const EdgeInsets.only(top: 25),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (emailAddressController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty &&
+                              passwordconfirmController.text.isEmpty) {
+                            if (passwordController.text ==
+                                passwordconfirmController.text) {
+                              bool res = await service.signInFromFb(
+                                  emailAddressController.text,
+                                  passwordController.text);
+                              if (res) {
+                                User? user = FirebaseAuth.instance.currentUser;
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Exito'),
+                                      content: Text(
+                                          'Usuario creado con exito ' "\n" +
+                                              user!.email.toString()),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () async {
+                                              await service.signOutFromFireb();
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop();
+                                            },
+                                            child: const Text('Ok'))
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Algo anda mal'),
+                                      content: const Text(
+                                          'Las contraseñas no coinciden'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop();
+                                            },
+                                            child: const Text('Ok'))
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'Las contraseñas no coinciden'),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          },
+                                          child: const Text('Ok'))
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text('Campos vacios'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        },
+                                        child: const Text('Ok'))
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(ColorSelect.orange),
+                            shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3)))),
+                        child: Text("Crear cuenta",
+                            style:
+                                _textStyle(bold: false, size: 25, numColor: 5)),
+                      ),
                     ),
                   ),
                   //const Padding(padding: EdgeInsets.only(top: 15)),
@@ -101,17 +203,18 @@ class _RegisterState extends State<Register> {
               // width: 250,
               // height: 250,
               //color: Colors.red,
-              padding: const EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 15),
               child: Column(
                 children: [
                   Text(
                     'O ingrese con',
                     style: _textStyle(bold: false, size: 20, numColor: 3),
                   ),
-                  const Padding(padding: EdgeInsets.only(top: 15)),
+                  //const Padding(padding: EdgeInsets.only(top: 15)),
                   Container(
+                    margin: const EdgeInsets.only(top: 15),
                     //color: Colors.green,
-                    width: 160,
+                    width: MediaQuery.of(context).size.width * 0.4,
                     child: InkWell(
                       onTap: () async {
                         try {
@@ -166,8 +269,8 @@ class _RegisterState extends State<Register> {
                       },
                       child: Ink(
                         color: ColorSelect.white,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12),
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 12),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
@@ -186,15 +289,16 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  //const Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
-                    width: 164,
-                    height: 45,
+                    margin: const EdgeInsets.only(top: 10),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: 43,
                     //color: Colors.green,
                     child: ElevatedButton(
                       onPressed: () async {
                         try {
-                          print('button facebook');
+                          //print('button facebook');
                           await service.signInWithFacebook();
                           User? user = FirebaseAuth.instance.currentUser;
                           showDialog(
@@ -258,33 +362,44 @@ class _RegisterState extends State<Register> {
                             width: 35,
                             height: 35,
                           ),
-                          const Padding(padding: EdgeInsets.only(right: 10)),
-                          Text('Facebook',
-                              style: _textStyle(
-                                  bold: false, size: 20, numColor: 5)),
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            child: Text('Facebook',
+                                style: _textStyle(
+                                    bold: false, size: 20, numColor: 5)),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.only(top: 10)),
-                  SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '¿Ya tienes cuenta?',
-                          style: _textStyle(bold: false, size: 12, numColor: 3),
-                        ),
-                        const SizedBox(width: 12),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Ingresar',
+
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: SizedBox(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '¿Ya tienes cuenta?',
                             style:
-                                _textStyle(bold: false, size: 12, numColor: 1),
+                                _textStyle(bold: false, size: 12, numColor: 3),
                           ),
-                        )
-                      ],
+                          const SizedBox(width: 12),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Login()));
+                            },
+                            child: Text(
+                              'Ingresar',
+                              style: _textStyle(
+                                  bold: false, size: 12, numColor: 1),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -327,29 +442,29 @@ class _RegisterState extends State<Register> {
               });
             },
           ),
+          border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          hintText: field),
+    );
+  }
+
+  TextField _textFieldPasswordConfirm({required String field}) {
+    return TextField(
+      style: _textStyle(bold: false, size: 13, numColor: 1),
+      obscureText: _isHide2,
+      controller: passwordconfirmController,
+      decoration: InputDecoration(
+          prefixIcon: IconButton(
+            icon: Icon(_isHide2 ? Icons.lock_open : Icons.lock_outline),
+            onPressed: () {
+              setState(() {
+                _isHide2 = !_isHide2;
+              });
+            },
+          ),
           //labelText: field,
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
-          // suffixIcon: Padding(
-          //   padding: const EdgeInsetsDirectional.only(start: 10),
-          //   child: Row(
-          //     children: [
-          //       //const Padding(padding: EdgeInsets.only(left: 5)),
-          //       IconButton(
-          //         icon: Icon(_isHide ? Icons.lock_open : Icons.lock_outline),
-          //         onPressed: () {
-          //           setState(
-          //             () {
-          //               _isHide = !_isHide;
-          //             },
-          //           );
-          //         },
-          //       ),
-          //       //const Padding(padding: EdgeInsets.only(left: 5)),
-          //       Text(field)
-          //     ],
-          //   ),
-          // ),
           hintText: field),
     );
   }

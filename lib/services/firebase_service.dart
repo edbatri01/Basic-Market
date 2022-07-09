@@ -1,12 +1,14 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../src/models/resource.dart';
-
-class FirebaseService {
+class FirebaseService  {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
 
   Future<String?> signInwithGoogle() async {
     try {
@@ -34,7 +36,8 @@ class FirebaseService {
     print('Estoy en el future de facebook');
     final LoginResult result = await FacebookAuth.instance.login();
 
-    final OAuthCredential facebookCredential = FacebookAuthProvider.credential(result.accessToken!.token);
+    final OAuthCredential facebookCredential =
+        FacebookAuthProvider.credential(result.accessToken!.token);
 
     return FirebaseAuth.instance.signInWithCredential(facebookCredential);
     //   try {
@@ -58,9 +61,44 @@ class FirebaseService {
     // }
   }
 
-
   Future<void> signOutFromFacebook() async {
     await FacebookAuth.instance.logOut();
     await _auth.signOut();
+  }
+
+  Future<bool> signInFromFb(String email, String password)async {
+     
+        _auth.signInWithEmailAndPassword(
+            email: email, password: password)
+        .then((result) {
+      dbRef.child(result.user!.uid).set({
+        "email": email,
+      }).then((res) {
+        return true;
+      });
+    }).catchError((err) {
+      return false;
+    });
+    return false;
+  }
+
+  Future<void> signOutFromFireb() async {
+    await _auth.signOut();
+  }
+
+  Future<bool> registerFromFb(String email, String password)async {
+     
+        _auth.createUserWithEmailAndPassword(
+            email: email, password: password)
+        .then((result) {
+      dbRef.child(result.user!.uid).set({
+        "email": email,
+      }).then((res) {
+        return true;
+      });
+    }).catchError((err) {
+      return false;
+    });
+    return false;
   }
 }

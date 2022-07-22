@@ -12,13 +12,15 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: SingleChildScrollView(
+            reverse:true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(

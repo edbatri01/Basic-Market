@@ -1,4 +1,5 @@
 import 'package:basic_market/services/firebase_service.dart';
+import 'package:basic_market/src/pages/home/home.dart';
 import 'package:basic_market/src/pages/login/login.dart';
 import 'package:basic_market/src/pages/register/register.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
@@ -63,30 +64,44 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                         try {
                           await service.signInwithGoogle();
                           User? user = FirebaseAuth.instance.currentUser;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
+                            ),
+                          );
                           showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Autenticación Exitosa'),
-                                  content: Text(
-                                    user!.email.toString() +
-                                        "\n" +
-                                        user.displayName.toString(),
-                                    style: _textStyle(
-                                        bold: true, size: 20, numColor: 1),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () async {
-                                          await service.signOutFromGoogle();
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                        },
-                                        child: const Text('Ok'))
-                                  ],
-                                );
-                              });
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Autenticación Exitosa'),
+                                content: Text(
+                                  user!.email.toString() +
+                                      "\n" +
+                                      user.displayName.toString(),
+                                  style: _textStyle(
+                                      bold: true, size: 20, numColor: 1),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () async {
+                                        await service.signOutFromGoogle();
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const Login(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text('Ok'))
+                                ],
+                              );
+                            },
+                          );
                         } catch (e) {
                           if (e is FirebaseAuthException) {
                             showDialog(
@@ -145,6 +160,12 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                         try {
                           await service.signInWithFacebook();
                           User? user = FirebaseAuth.instance.currentUser;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Home(),
+                            ),
+                          );
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -162,6 +183,14 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                                           Navigator.of(context,
                                                   rootNavigator: true)
                                               .pop();
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Login(),
+                                            ),
+                                          );
                                         },
                                         child: const Text('Ok'))
                                   ],
@@ -237,9 +266,11 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Register()));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Register(),
+                        ),
+                      );
                     },
                     style: ButtonStyle(
                         backgroundColor:
@@ -258,7 +289,7 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
             //const Padding(padding: EdgeInsets.only(top: 50)),
             Container(
               //color: Colors.green,
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.6,
               height: 35,
               margin: const EdgeInsets.only(top: 40),
               child: Row(
@@ -266,7 +297,7 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                 children: [
                   Text(
                     '¿Ya tienes cuenta?',
-                    style: _textStyle(bold: false, size: 14, numColor: 3),
+                    style: _textStyle(bold: false, size: 15, numColor: 3),
                   ),
                   const SizedBox(width: 8),
                   TextButton(
@@ -278,7 +309,7 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                     },
                     child: Text(
                       'Ingresar',
-                      style: _textStyle(bold: true, size: 14, numColor: 1),
+                      style: _textStyle(bold: true, size: 15, numColor: 1),
                     ),
                   )
                 ],

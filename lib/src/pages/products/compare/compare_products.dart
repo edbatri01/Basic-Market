@@ -7,30 +7,31 @@ import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
 
 class CompareProducts extends StatefulWidget {
+  final int id;
   final String url;
   final String name;
-  final String desc;
   final String price;
-  const CompareProducts(this.url, this.name, this.desc, this.price, {Key? key})
+  const CompareProducts(this.id,this.url, this.name, this.price, {Key? key})
       : super(key: key);
 
   @override
   _CompareProductsState createState() =>
-      _CompareProductsState(url, name, desc, price);
+      // ignore: no_logic_in_create_state
+      _CompareProductsState(id,url, name, price);
 }
 
 class _CompareProductsState extends State<CompareProducts> {
+  int id;
   String url;
   String name;
-  String desc;
   String price;
 
-  _CompareProductsState(this.url, this.name, this.desc, this.price);
+  _CompareProductsState(this.id,this.url, this.name, this.price);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: ColorSelect.white,
         elevation: 0,
@@ -80,7 +81,8 @@ class _CompareProductsState extends State<CompareProducts> {
                               margin: const EdgeInsets.only(left: 3),
                               child: Text(
                                 'Tu ubicación',
-                                style: _textStyle(bold: false, size: 18, numColor: 7),
+                                style: _textStyle(
+                                    bold: false, size: 18, numColor: 7),
                               ),
                             )
                           ],
@@ -97,9 +99,7 @@ class _CompareProductsState extends State<CompareProducts> {
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  child: CardBM()
-                ),
+                    margin: const EdgeInsets.only(top: 15), child: CardBM()),
                 Container(
                   margin: const EdgeInsets.only(top: 15),
                   width: MediaQuery.of(context).size.width * 0.45,
@@ -112,15 +112,12 @@ class _CompareProductsState extends State<CompareProducts> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
+                        Image.network(
                           url,
                           width: 100,
                           height: 120,
                         ),
                         Text(name,
-                            style:
-                                _textStyle(bold: false, size: 15, numColor: 3)),
-                        Text(desc,
                             style:
                                 _textStyle(bold: false, size: 15, numColor: 3)),
                         Text("\$" + price,
@@ -142,7 +139,7 @@ class _CompareProductsState extends State<CompareProducts> {
                     style: _textStyle(bold: true, size: 20, numColor: 1),
                   ),
                 ),
-                const CardCompair()
+                CardCompair(id)
               ],
             ),
           ),

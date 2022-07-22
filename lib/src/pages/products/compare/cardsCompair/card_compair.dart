@@ -1,17 +1,33 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, no_logic_in_create_state
 
+import 'dart:convert';
+
+import 'package:basic_market/src/models/products_by_shop.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
 import 'package:counter_button/counter_button.dart';
+import 'package:http/http.dart' as http;
 
 class CardCompair extends StatefulWidget {
-  const CardCompair({Key? key}) : super(key: key);
+  final int id;
+  const CardCompair(this.id, {Key? key}) : super(key: key);
 
   @override
-  State<CardCompair> createState() => _CardCompairState();
+  State<CardCompair> createState() => _CardCompairState(id);
 }
 
 class _CardCompairState extends State<CardCompair> {
+  int id;
+
+  Future<ProductsByShop> getProductsByShop() async {
+    final resp = await http.post(
+        Uri.parse('http://44.207.133.148/filterPriceByshop'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"id_product": id}));
+    return productsByShopFromJson(resp.body);
+  }
+
+  _CardCompairState(this.id);
   var products = [
     {
       "image": "assets/images/aceite.png",
@@ -50,13 +66,32 @@ class _CardCompairState extends State<CardCompair> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getProductsByShop(),
+        builder:
+            (BuildContext context, AsyncSnapshot<ProductsByShop> snapshot) {
+          if (snapshot.hasData) {
+            return _ListProductsByShop(snapshot.data!.productsByShop);
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
+  }
+}
+
+class _ListProductsByShop extends StatelessWidget {
+  final List<ProductsByShopElement> productsByShop;
+  _ListProductsByShop(this.productsByShop);
+  int _counterValue = 1;
+  @override
+  Widget build(BuildContext context) {
     return Container(
       //color: Colors.amberAccent,
       width: MediaQuery.of(context).size.width,
       height: 1000,
       margin: const EdgeInsets.only(top: 15, left: 8),
       child: Column(
-        children: List.generate(shops.length, (index) {
+        children: List.generate(productsByShop.length, (index) {
           return Container(
             //color: Colors.amberAccent,
 
@@ -76,7 +111,7 @@ class _CardCompairState extends State<CardCompair> {
                         margin: const EdgeInsets.only(left: 130),
                         //color: Colors.red,
                         child: Text(
-                          "\$" + products[index]['price'].toString(),
+                          "\$" + productsByShop[index].price.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -92,11 +127,10 @@ class _CardCompairState extends State<CardCompair> {
                             child: CounterButton(
                               loading: false,
                               onChange: (int val) {
-                                  
                                 if (_counterValue >= 1 && val > 0) {
                                   _counterValue = val;
                                 }
-                                setState(() {});
+                                //setState(() {});
                               },
                               count: _counterValue,
                               countColor: ColorSelect.black,
@@ -112,9 +146,10 @@ class _CardCompairState extends State<CardCompair> {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(left: 15),
-                        child: Image.asset(
-                          shops[index]['image'].toString(),
-                          height: 100,
+                        child: Image.network(
+                          productsByShop[index].shopImg.toString(),
+                          height: 63,
+                          width: 150,
                         ),
                       ),
                       Container(
@@ -122,7 +157,7 @@ class _CardCompairState extends State<CardCompair> {
                         child: Text(
                           'Total = ' +
                               "\$" +
-                              products[index]['price'].toString(),
+                              productsByShop[index].price.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
@@ -137,7 +172,7 @@ class _CardCompairState extends State<CardCompair> {
                       Container(
                         margin: const EdgeInsets.only(left: 130),
                         child: const Text(
-                          '-5%',
+                          '',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,

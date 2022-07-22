@@ -1,36 +1,52 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:basic_market/src/models/products.dart';
 import 'package:basic_market/src/pages/products/compare/compare_products.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class CardBM extends StatelessWidget {
-  var products = [
-    {
-      "image": "assets/images/aceite.png",
-      "name": "Aceite nutrioli",
-      "desc": "Puro de soya 946 ml",
-      "price": 30.0
-    },
-    {
-      "image": "assets/images/atun.png",
-      "name": "Atun dolores",
-      "desc": "En agua 120 gr",
-      "price": 13.0
-    },
-    {
-      "image": "assets/images/cafe.png",
-      "name": "Nescafe",
-      "desc": "Café soluble 1kg",
-      "price": 120.0
-    },
-    {
-      "image": "assets/images/leche.png",
-      "name": "Lala Deslactosada",
-      "desc": "1L",
-      "price": 24.0
-    },
-  ];
-
+class CardBM extends StatefulWidget {
   CardBM({Key? key}) : super(key: key);
+
+  @override
+  State<CardBM> createState() => _CardBMState();
+}
+
+Future<Products> getProducts() async {
+  final resp = await http.get(
+    Uri.parse('http://44.207.133.148/getProducts'),
+    //headers: {"Content-Type": "application/json"},
+  );
+  // print(resp.body);
+  log(resp.body.toString());
+  return productsFromJson(resp.body);
+}
+
+class _CardBMState extends State<CardBM> {
+  // var products = [
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getProducts(),
+        builder: (BuildContext context, AsyncSnapshot<Products> snapshot) {
+          if (snapshot.hasData) {
+            return _ListProducts(snapshot.data!.items);
+          } else {
+            print(snapshot.hasData);
+            return const CircularProgressIndicator();
+          }
+        });
+  }
+}
+
+class _ListProducts extends StatelessWidget {
+  final List<Item> products;
+  const _ListProducts(this.products);
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +65,10 @@ class CardBM extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => CompareProducts(
-                        products[index]['image'].toString(),
-                        products[index]['name'].toString(),
-                        products[index]['desc'].toString(),
-                        products[index]['price'].toString()))),
+                        products[index].id,
+                        products[index].urlImage.toString(),
+                        products[index].name.toString(),
+                        products[index].code.toString()))),
             child: Container(
               width: 100,
               decoration: BoxDecoration(
@@ -64,8 +80,8 @@ class CardBM extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      products[index]['image'].toString(),
+                    Image.network(
+                      products[index].urlImage.toString(),
                       fit: BoxFit.cover,
                       width: 100,
                       height: 100,
@@ -73,37 +89,37 @@ class CardBM extends StatelessWidget {
                     Container(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        products[index]['name'].toString(),
+                        products[index].name.toString(),
                         style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                             color: Colors.green),
                       ),
                     ),
-                    SizedBox(
-                      width: 170,
-                      child: Text(
-                        products[index]['desc'].toString(),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                            color: Colors.grey),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 170,
+                    //   child: Text(
+                    //     productsChe[index]['desc'].toString(),
+                    //     style: const TextStyle(
+                    //         fontWeight: FontWeight.normal,
+                    //         fontSize: 15,
+                    //         color: Colors.grey),
+                    //   ),
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "\$",
+                      children: const [
+                        Text(
+                          "",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 17),
                         ),
-                        Text(
-                          products[index]['price'].toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17),
-                        )
+                        // Text(
+                        //   products[index].code,
+                        //   style: const TextStyle(
+                        //       fontWeight: FontWeight.bold, fontSize: 17),
+                        // )
                       ],
                     )
                   ],

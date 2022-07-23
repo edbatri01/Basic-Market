@@ -86,23 +86,23 @@ class _LoginState extends State<Login> {
                           child: _textFieldPassword(field: 'Contraseña')),
                       //const Padding(padding: EdgeInsets.only(top: 10)),
 
-                      Container(
-                        //width: 350,
-                        height: 48,
-                        //color: Colors.red,
-                        margin: const EdgeInsets.only(left: 219, top: 10),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            '¿Olvide mi contraseña?',
-                            style:
-                                _textStyle(bold: true, size: 12, numColor: 1),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   //width: 350,
+                      //   height: 48,
+                      //   //color: Colors.red,
+                      //   margin: const EdgeInsets.only(left: 219, top: 10),
+                      //   child: TextButton(
+                      //     onPressed: () {},
+                      //     child: Text(
+                      //       '¿Olvide mi contraseña?',
+                      //       style:
+                      //           _textStyle(bold: true, size: 12, numColor: 1),
+                      //     ),
+                      //   ),
+                      // ),
 
                       Container(
-                        margin: const EdgeInsets.only(top: 15),
+                        margin: const EdgeInsets.only(top: 25),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: 40,
@@ -110,8 +110,12 @@ class _LoginState extends State<Login> {
                             onPressed: () async {
                               if (emailAddressController.text.isNotEmpty &&
                                   passwordController.text.isNotEmpty) {
-                                    logInToFb();
-                                    User? user = FirebaseAuth.instance.currentUser;
+                                logInToFb();
+                                User? user = FirebaseAuth.instance.currentUser;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home()));
                                 // bool res = await service.signInFromFb(
                                 //     emailAddressController.text,
                                 //     passwordController.text);
@@ -219,10 +223,9 @@ class _LoginState extends State<Login> {
                               await service.signInwithGoogle();
                               User? user = FirebaseAuth.instance.currentUser;
                               Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Home()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Home()));
                               // showDialog(
                               //     context: context,
                               //     builder: (BuildContext context) {
@@ -308,10 +311,9 @@ class _LoginState extends State<Login> {
                                 await service.signInWithFacebook();
                                 User? user = FirebaseAuth.instance.currentUser;
                                 Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Home()));
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home()));
                                 // showDialog(
                                 //     context: context,
                                 //     builder: (BuildContext context) {

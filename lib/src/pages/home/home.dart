@@ -2,6 +2,7 @@ import 'package:basic_market/src/pages/bottomnavigationvar/bottom_nativigation_b
 import 'package:basic_market/src/pages/categories/categories.dart';
 import 'package:basic_market/src/pages/home/components/cards/card.dart';
 import 'package:basic_market/src/pages/home/components/caroulsel/caroulser.dart';
+import 'package:basic_market/src/pages/search/searche_delegate.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
 
@@ -12,15 +13,17 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final id = arguments['id'];
+    final name = arguments['name'];
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: SingleChildScrollView(
-            reverse:true,
+        reverse: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
@@ -35,22 +38,22 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ' Entregar en:',
-                      style: _textStyle(bold: false, size: 14, numColor: 3),
+                      ' Hola:',
+                      style: _textStyle(bold: true, size: 15, numColor: 3),
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 7),
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.location_on_sharp,
+                            Icons.account_circle,
                             size: 23,
                             color: ColorSelect.black2,
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 3),
                             child: Text(
-                              'Tu ubicación',
+                              name.toString(),
                               style: _textStyle(
                                   bold: false, size: 18, numColor: 7),
                             ),
@@ -65,7 +68,7 @@ class _HomeState extends State<Home> {
                         width: MediaQuery.of(context).size.width * 0.7,
                         //color: Colors.amberAccent,
                         child: Text(
-                          '¡Encuentra tu mejor opción!',
+                          '¡Proximamente!',
                           style: _textStyle(bold: true, size: 25, numColor: 1),
                         ),
                       ),
@@ -85,25 +88,25 @@ class _HomeState extends State<Home> {
                       'Popular',
                       style: _textStyle(bold: true, size: 20, numColor: 1),
                     ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Ver todo',
-                          style: _textStyle(bold: false, size: 20, numColor: 8),
-                        ))
+                    // TextButton(
+                    //     onPressed: () {},
+                    //     child: Text(
+                    //       'Ver todo',
+                    //       style: _textStyle(bold: false, size: 20, numColor: 8),
+                    //     ))
                   ],
                 ),
               ),
               Container(
                   margin: const EdgeInsets.only(top: 20), child: CardBM()),
-              Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: const Categories()),
+              // Container(
+              //     margin: const EdgeInsets.only(top: 10),
+              //     child: const Categories()),
             ],
           ),
         ),
       )),
-      bottomNavigationBar: const BottomNativigationBarClass(),
+      bottomNavigationBar: BottomNativigationBarClass(),
     );
   }
 
@@ -127,6 +130,7 @@ class _HomeState extends State<Home> {
           child: IconButton(
             icon: const Icon(Icons.search, color: ColorSelect.white),
             onPressed: () {
+              showSearch(context: context, delegate: searchProduct());
               setState(() {});
             },
           ),
@@ -138,6 +142,9 @@ class _HomeState extends State<Home> {
         //borderRadius: BorderRadius.all(Radius.circular(15))),
         hintText: field,
       ),
+      onTap: () {
+        showSearch(context: context, delegate: searchProduct());
+      },
     );
   }
 

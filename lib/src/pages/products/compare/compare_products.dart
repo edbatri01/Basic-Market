@@ -11,13 +11,13 @@ class CompareProducts extends StatefulWidget {
   final String url;
   final String name;
   final String price;
-  const CompareProducts(this.id,this.url, this.name, this.price, {Key? key})
+  const CompareProducts(this.id, this.url, this.name, this.price, {Key? key})
       : super(key: key);
 
   @override
   _CompareProductsState createState() =>
       // ignore: no_logic_in_create_state
-      _CompareProductsState(id,url, name, price);
+      _CompareProductsState(id, url, name, price);
 }
 
 class _CompareProductsState extends State<CompareProducts> {
@@ -26,7 +26,7 @@ class _CompareProductsState extends State<CompareProducts> {
   String name;
   String price;
 
-  _CompareProductsState(this.id,this.url, this.name, this.price);
+  _CompareProductsState(this.id, this.url, this.name, this.price);
 
   @override
   Widget build(BuildContext context) {
@@ -59,47 +59,6 @@ class _CompareProductsState extends State<CompareProducts> {
                   margin: const EdgeInsets.only(top: 10),
                   child: _textFieldSearch(field: 'Buscar producto'),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ' Entregar en:',
-                        style: _textStyle(bold: false, size: 14, numColor: 3),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 7),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.location_on_sharp,
-                              size: 23,
-                              color: ColorSelect.black2,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 3),
-                              child: Text(
-                                'Tu ubicación',
-                                style: _textStyle(
-                                    bold: false, size: 18, numColor: 7),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 7, top: 30),
-                        child: Text(
-                          'Recomendaciones',
-                          style: _textStyle(bold: true, size: 20, numColor: 1),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                    margin: const EdgeInsets.only(top: 15), child: CardBM()),
                 Container(
                   margin: const EdgeInsets.only(top: 15),
                   width: MediaQuery.of(context).size.width * 0.45,
@@ -139,13 +98,54 @@ class _CompareProductsState extends State<CompareProducts> {
                     style: _textStyle(bold: true, size: 20, numColor: 1),
                   ),
                 ),
-                CardCompair(id)
+                CardCompair(id),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text(
+                      //   ' Entregar en:',
+                      //   style: _textStyle(bold: false, size: 14, numColor: 3),
+                      // ),
+                      // Container(
+                      //   margin: const EdgeInsets.only(top: 7),
+                      //   child: Row(
+                      //     children: [
+                      //       const Icon(
+                      //         Icons.location_on_sharp,
+                      //         size: 23,
+                      //         color: ColorSelect.black2,
+                      //       ),
+                      //       Container(
+                      //         margin: const EdgeInsets.only(left: 3),
+                      //         child: Text(
+                      //           'Tu ubicación',
+                      //           style: _textStyle(
+                      //               bold: false, size: 18, numColor: 7),
+                      //         ),
+                      //       )
+                      //     ],
+                      //   ), 
+                      // ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 7, top: 30),
+                        child: Text(
+                          'Recomendaciones',
+                          style: _textStyle(bold: true, size: 20, numColor: 1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    margin: const EdgeInsets.only(top: 15), child: CardBM()),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: const BottomNativigationBarClass(),
+      bottomNavigationBar:  BottomNativigationBarClass(),
     );
   }
 

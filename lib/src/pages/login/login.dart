@@ -4,7 +4,6 @@ import 'package:basic_market/src/pages/register/register.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 // import 'package:flutter/src/material/ink_decoration.dart';
 // import 'package:flutter/cupertino.dart';
@@ -21,8 +20,7 @@ class _LoginState extends State<Login> {
   var passwordController = TextEditingController();
   bool _isHide = true;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  DatabaseReference dbRef =
-      FirebaseDatabase.instance.reference().child("Users");
+  DatabaseReference dbRef = FirebaseDatabase.instance.ref().child("Users");
 
   FirebaseService service = FirebaseService();
 
@@ -47,219 +45,86 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: SingleChildScrollView(
           reverse: true,
-          child: Container(
-            margin: const EdgeInsets.only(top: 1),
-            color: ColorSelect.white,
+          child: SizedBox(
+            //margin: const EdgeInsets.only(top: 40),
+            //color: ColorSelect.orange,
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             //color: Colors.amberAccent,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/basic_market_logo.png',
-                      fit: BoxFit.fill,
-                      //width: 200,
-                      height: 80,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        'Iniciar sesión',
-                        style: _textStyle(bold: false, size: 30, numColor: 1),
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  //color: Colors.amber,
-                  margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                  width: MediaQuery.of(context).size.width,
-                  height: 268,
-                  child: Column(
-                    children: [
-                      _textField(field: 'Correo electrónico'),
-                      Container(
-                          margin: const EdgeInsets.only(top: 12),
-                          child: _textFieldPassword(field: 'Contraseña')),
-                      //const Padding(padding: EdgeInsets.only(top: 10)),
-
-                      // Container(
-                      //   //width: 350,
-                      //   height: 48,
-                      //   //color: Colors.red,
-                      //   margin: const EdgeInsets.only(left: 219, top: 10),
-                      //   child: TextButton(
-                      //     onPressed: () {},
-                      //     child: Text(
-                      //       '¿Olvide mi contraseña?',
-                      //       style:
-                      //           _textStyle(bold: true, size: 12, numColor: 1),
-                      //     ),
-                      //   ),
-                      // ),
-
-                      Container(
-                        margin: const EdgeInsets.only(top: 25),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (emailAddressController.text.isNotEmpty &&
-                                  passwordController.text.isNotEmpty) {
-                                logInToFb();
-                                User? user = FirebaseAuth.instance.currentUser;
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Home()));
-                                // bool res = await service.signInFromFb(
-                                //     emailAddressController.text,
-                                //     passwordController.text);
-                                // if (res) {
-                                //   User? user =
-                                //       FirebaseAuth.instance.currentUser;
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return AlertDialog(
-                                //         title: const Text('Exito'),
-                                //         content: Text('Bienvenido ' "\n" +
-                                //             user!.displayName.toString()),
-                                //         actions: [
-                                //           TextButton(
-                                //               onPressed: () async {
-                                //                 await service
-                                //                     .signOutFromFireb();
-                                //                 Navigator.of(context,
-                                //                         rootNavigator: true)
-                                //                     .pop();
-                                //               },
-                                //               child: const Text('Ok'))
-                                //         ],
-                                //       );
-                                //     },
-                                //   );
-                                // } else {
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return AlertDialog(
-                                //         title: const Text('Algo anda mal'),
-                                //         content: const Text(
-                                //             'Usuario o contraseña incorrectos'),
-                                //         actions: [
-                                //           TextButton(
-                                //               onPressed: () {
-                                //                 Navigator.of(context,
-                                //                         rootNavigator: true)
-                                //                     .pop();
-                                //               },
-                                //               child: const Text('Ok'))
-                                //         ],
-                                //       );
-                                //     },
-                                //   );
-                                // }
-                              } else {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('Error'),
-                                      content: const Text(
-                                          'Proporcione usuario y contraseña'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop();
-                                            },
-                                            child: const Text('Ok'))
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    ColorSelect.orange),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(3)))),
-                            child: Text("Ingregar",
-                                style: _textStyle(
-                                    bold: false, size: 25, numColor: 5)),
-                          ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    //width: MediaQuery.of(context).size.width * 0.5,
+                    //height: MediaQuery.of(context).size.height * 0.17,
+                    //color: Colors.red,
+                    margin: const EdgeInsets.only(top: 100),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/basic_market_logo.png',
+                          fit: BoxFit.fill,
+                          //width: 200,
+                          height: 80,
                         ),
-                      ),
-                      //const Padding(padding: EdgeInsets.only(top: 15)),
-                    ],
+                        Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Iniciar sesión',
+                            style:
+                                _textStyle(bold: false, size: 30, numColor: 1),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Text(
-                  'O continue con',
-                  style: _textStyle(bold: false, size: 20, numColor: 3),
-                ),
-                //const Padding(padding: EdgeInsets.only(top: 3)),
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  child: Column(
-                    children: [
-                      //const Padding(padding: EdgeInsets.only(top: 15)),
-                      SizedBox(
-                        //color: Colors.green,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: InkWell(
-                          onTap: () async {
-                            try {
-                              await service.signInwithGoogle();
-                              User? user = FirebaseAuth.instance.currentUser;
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()));
-                              // showDialog(
-                              //     context: context,
-                              //     builder: (BuildContext context) {
-                              //       return AlertDialog(
-                              //         title:
-                              //             const Text('Autenticación Exitosa'),
-                              //         content: Text(
-                              //           user!.email.toString() +
-                              //               "\n" +
-                              //               user.displayName.toString(),
-                              //           style: _textStyle(
-                              //               bold: true, size: 20, numColor: 1),
-                              //         ),
-                              //         actions: [
-                              //           TextButton(
-                              //               onPressed: () async {
-                              //                 await service.signOutFromGoogle();
-                              //                 Navigator.of(context,
-                              //                         rootNavigator: true)
-                              //                     .pop();
-                              //               },
-                              //               child: const Text('Ok'))
-                              //         ],
-                              //       );
-                              //     });
-                            } catch (e) {
-                              if (e is FirebaseAuthException) {
-                                showDialog(
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    //color: Colors.amber,
+                    margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+                    width: MediaQuery.of(context).size.width,
+                    height: 268,
+                    child: Column(
+                      children: [
+                        _textField(field: 'Correo electrónico'),
+                        Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: _textFieldPassword(field: 'Contraseña'),
+                        ),
+
+                        Container(
+                          margin: const EdgeInsets.only(top: 25),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (emailAddressController.text.isNotEmpty &&
+                                    passwordController.text.isNotEmpty) {
+                                  logInToFb();
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Home(),
+                                          settings: RouteSettings(arguments: {
+                                            'id': user!.uid,
+                                            'name': user.displayName
+                                          })));
+                                } else {
+                                  showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('Algo salio mal'),
+                                        title: const Text('Error'),
                                         content: const Text(
-                                            'No fue posible autenticar'),
+                                            'Proporcione usuario y contraseña'),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
@@ -270,27 +135,103 @@ class _LoginState extends State<Login> {
                                               child: const Text('Ok'))
                                         ],
                                       );
-                                    });
+                                    },
+                                  );
+                                }
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      ColorSelect.orange),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)))),
+                              child: Text("Ingregar",
+                                  style: _textStyle(
+                                      bold: false, size: 25, numColor: 5)),
+                            ),
+                          ),
+                        ),
+                        //const Padding(padding: EdgeInsets.only(top: 15)),
+                      ],
+                    ),
+                  ),
+                ),
+
+                //const Padding(padding: EdgeInsets.only(top: 3)),
+                Container(
+                  //color: Colors.red,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    children: [
+                      Text(
+                        'O continue con',
+                        style: _textStyle(bold: false, size: 20, numColor: 3),
+                      ),
+                      //const Padding(padding: EdgeInsets.only(top: 15)),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: SizedBox(
+                          //color: Colors.green,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          height: 43,
+                          child: InkWell(
+                            onTap: () async {
+                              try {
+                                await service.signInwithGoogle();
+                                User? user = FirebaseAuth.instance.currentUser;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Home(),
+                                        settings: RouteSettings(arguments: {
+                                          'id': user!.uid,
+                                          'name': user.displayName
+                                        })));
+                              } catch (e) {
+                                if (e is FirebaseAuthException) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Algo salio mal'),
+                                          content: const Text(
+                                              'No fue posible autenticar'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context,
+                                                          rootNavigator: true)
+                                                      .pop();
+                                                },
+                                                child: const Text('Ok'))
+                                          ],
+                                        );
+                                      });
+                                }
                               }
-                            }
-                          },
-                          child: Ink(
-                            color: ColorSelect.white,
-                            child: Container(
-                              margin: const EdgeInsets.only(left: 12),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/images/google-r.png',
-                                    width: 35,
-                                    height: 35,
-                                  ), // <-- Use 'Image.asset(...)' here
-                                  const SizedBox(width: 12),
-                                  Text('Google',
-                                      style: _textStyle(
-                                          bold: false, size: 20, numColor: 1)),
-                                ],
+                            },
+                            child: Ink(
+                              color: ColorSelect.white,
+                              child: Container( 
+                                margin: const EdgeInsets.only(left: 18),
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/google-r.png',
+                                      width: 35,
+                                      height: 35,
+                                    ), // <-- Use 'Image.asset(...)' here
+                                    const SizedBox(width: 30),
+                                    Text('Google',
+                                        style: _textStyle(
+                                            bold: false,
+                                            size: 20,
+                                            numColor: 1)),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -301,45 +242,22 @@ class _LoginState extends State<Login> {
                         margin: const EdgeInsets.symmetric(vertical: 10),
                         child: SizedBox(
                           //color: Colors.amberAccent,
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.5,
                           height: 43,
                           //color: Colors.green,
                           child: ElevatedButton(
                             onPressed: () async {
                               try {
-                                //print('button facebook');
                                 await service.signInWithFacebook();
                                 User? user = FirebaseAuth.instance.currentUser;
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const Home()));
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return AlertDialog(
-                                //         title:
-                                //             const Text('Autenticación Exitosa'),
-                                //         content: Text(
-                                //           user!.displayName.toString(),
-                                //           style: _textStyle(
-                                //               bold: true,
-                                //               size: 20,
-                                //               numColor: 1),
-                                //         ),
-                                //         actions: [
-                                //           TextButton(
-                                //               onPressed: () async {
-                                //                 await service
-                                //                     .signOutFromFacebook();
-                                //                 Navigator.of(context,
-                                //                         rootNavigator: true)
-                                //                     .pop();
-                                //               },
-                                //               child: const Text('Ok'))
-                                //         ],
-                                //       );
-                                //     });
+                                        builder: (context) => const Home(),
+                                        settings: RouteSettings(arguments: {
+                                          'id': user!.uid,
+                                          'name': user.displayName
+                                        })));
                               } catch (e) {
                                 if (e is FirebaseAuthException) {
                                   showDialog(
@@ -374,14 +292,17 @@ class _LoginState extends State<Login> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Image.asset(
-                                  'assets/images/facebook.png',
-                                  //alignment: Alignment.topRight,
-                                  width: 35,
-                                  height: 35,
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  child: Image.asset(
+                                    'assets/images/facebook.png',
+                                    //alignment: Alignment.topRight,
+                                    width: 35,
+                                    height: 35,
+                                  ),
                                 ),
                                 Container(
-                                  margin: const EdgeInsets.only(right: 10),
+                                  margin: const EdgeInsets.only(left: 20),
                                   child: Text('Facebook',
                                       style: _textStyle(
                                           bold: false, size: 20, numColor: 5)),

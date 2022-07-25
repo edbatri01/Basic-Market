@@ -22,7 +22,7 @@ Future<Products> getProducts() async {
     //headers: {"Content-Type": "application/json"},
   );
   // print(resp.body);
-  log(resp.body.toString());
+  //log(resp.body.toString());
   return productsFromJson(resp.body);
 }
 
@@ -37,7 +37,7 @@ class _CardBMState extends State<CardBM> {
           if (snapshot.hasData) {
             return _ListProducts(snapshot.data!.items);
           } else {
-            print(snapshot.hasData);
+            //print(snapshot.hasData);
             return const CircularProgressIndicator();
           }
         });

@@ -79,135 +79,157 @@ class _CardCompairState extends State<CardCompair> {
   }
 }
 
-class _ListProductsByShop extends StatelessWidget {
+class _ListProductsByShop extends StatefulWidget {
   final List<ProductsByShopElement> productsByShop;
   _ListProductsByShop(this.productsByShop);
-  int _counterValue = 1;
+
+  @override
+  State<_ListProductsByShop> createState() => _ListProductsByShopState();
+}
+
+class _ListProductsByShopState extends State<_ListProductsByShop> {
+  // int _counterValue = 1;
+  // int countAux = 1;
+  // int isPressed = 0;
+  // bool flag = false;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //color: Colors.amberAccent,
-      width: MediaQuery.of(context).size.width,
-      height: 1000,
-      margin: const EdgeInsets.only(top: 15, left: 8),
-      child: Column(
-        children: List.generate(productsByShop.length, (index) {
-          return Container(
-            //color: Colors.amberAccent,
-
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: ColorSelect.white, width: 1)),
-            child: Card(
-              child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 130),
-                        //color: Colors.red,
-                        child: Text(
-                          "\$" + productsByShop[index].price.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.black),
-                        ),
-                      ),
-                      Row(
-                        //: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            //color: Colors.amberAccent,
-                            margin: const EdgeInsets.only(right: 30),
-                            child: CounterButton(
-                              loading: false,
-                              onChange: (int val) {
-                                if (_counterValue >= 1 && val > 0) {
-                                  _counterValue = val;
-                                }
-                                //setState(() {});
-                              },
-                              count: _counterValue,
-                              countColor: ColorSelect.black,
-                              buttonColor: ColorSelect.black,
-                            ),
+    return SingleChildScrollView(
+      child: Container(
+        //color: Colors.amberAccent,
+        width: MediaQuery.of(context).size.width,
+        //height: MediaQuery.of(context).size.height * 1.5,
+        margin: const EdgeInsets.only(top: 15, left: 8),
+        child: Column(
+          children: List.generate(widget.productsByShop.length, (index) {
+            return Container(
+              //color: Colors.amberAccent,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: ColorSelect.white, width: 1)),
+              child: Card(
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 130),
+                          //color: Colors.red,
+                          child: Text(
+                            "\$" +
+                                widget.productsByShop[index].price.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.black),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 15),
-                        child: Image.network(
-                          productsByShop[index].shopImg.toString(),
-                          height: 63,
-                          width: 150,
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 40),
-                        child: Text(
-                          'Total = ' +
-                              "\$" +
-                              productsByShop[index].price.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              fontFamily: 'Hack'),
+                        // Row(
+                        //   //: MainAxisAlignment.end,
+                        //   children: [
+                        //     Container(
+                        //       //color: Colors.amberAccent,
+                        //       margin: const EdgeInsets.only(right: 30),
+                        //       child: CounterButton(
+                        //         loading: false,
+                        //         onChange: (int val) {
+                        //           setState(() {
+                        //             if (_counterValue >= 1 && val > 0) {
+                        //               isPressed = index;
+
+                        //               print(val);
+                        //               _counterValue = val;
+                        //               print(val);
+                        //             }
+                        //           });
+                        //           print(isPressed.toString() +
+                        //               " --- " +
+                        //               index.toString() +
+                        //               " --- " +
+                        //               _counterValue.toString());
+                        //         },
+                        //         count:
+                        //             isPressed == index ? _counterValue : countAux,
+                        //         countColor: ColorSelect.black,
+                        //         buttonColor: ColorSelect.black,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 15),
+                          child: Image.network(
+                            widget.productsByShop[index].shopImg.toString(),
+                            height: 63,
+                            width: 150,
+                          ),
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 130),
-                        child: const Text(
-                          '',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: Colors.red),
+                        Container(
+                          margin: const EdgeInsets.only(right: 40),
+                          child: Text(
+                            'Total = ' +
+                                "\$" +
+                                widget.productsByShop[index].price.toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                fontFamily: 'Hack'),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 130),
+                          child: const Text(
+                            '',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Colors.red),
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 15),
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    ColorSelect.aquaGreen),
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(3)))),
-                            child: const Text(
-                              'Agregar a lista',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 15,
-                                  color: ColorSelect.white),
-                            )),
-                      )
-                    ],
-                  ),
-                  const Divider(thickness: 0.7),
-                ],
+                        Container(
+                          margin: const EdgeInsets.only(right: 15),
+                          child: ElevatedButton(
+                              onPressed: () {},
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      ColorSelect.aquaGreen),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(3)))),
+                              child: const Text(
+                                'Agregar a lista',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: ColorSelect.white),
+                              )),
+                        )
+                      ],
+                    ),
+                    const Divider(thickness: 0.7),
+                  ],
+                ),
               ),
-            ),
-          );
-        }),
+            );
+          }),
+        ),
       ),
     );
   }

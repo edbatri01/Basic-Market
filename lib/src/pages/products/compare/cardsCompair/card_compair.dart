@@ -21,7 +21,7 @@ class _CardCompairState extends State<CardCompair> {
 
   Future<ProductsByShop> getProductsByShop() async {
     final resp = await http.post(
-        Uri.parse('http://44.207.133.148/filterPriceByshop'),
+        Uri.parse('http://apibmbalancer-1997433991.us-east-1.elb.amazonaws.com/filterPriceByshop'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"id_product": id}));
     return productsByShopFromJson(resp.body);

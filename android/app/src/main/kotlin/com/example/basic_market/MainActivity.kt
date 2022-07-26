@@ -1,4 +1,4 @@
-package com.example.basic_market
+package com.ballinas.basic_market
 
 import io.flutter.embedding.android.FlutterActivity
 

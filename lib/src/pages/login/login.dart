@@ -96,7 +96,6 @@ class _LoginState extends State<Login> {
                           margin: const EdgeInsets.only(top: 20),
                           child: _textFieldPassword(field: 'Contraseña'),
                         ),
-
                         Container(
                           margin: const EdgeInsets.only(top: 25),
                           child: SizedBox(
@@ -153,7 +152,14 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        //const Padding(padding: EdgeInsets.only(top: 15)),
+                        Container(
+                          margin: const EdgeInsets.only(top: 30),
+                          child: Text(
+                            'O continue con',
+                            style:
+                                _textStyle(bold: false, size: 20, numColor: 3),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -165,13 +171,15 @@ class _LoginState extends State<Login> {
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Column(
                     children: [
-                      Text(
-                        'O continue con',
-                        style: _textStyle(bold: false, size: 20, numColor: 3),
-                      ),
+                      // Text(
+                      //   'O continue con',
+                      //   style: _textStyle(bold: false, size: 20, numColor: 3),
+                      // ),
                       //const Padding(padding: EdgeInsets.only(top: 15)),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1.0, color: ColorSelect.grey1)),
                         child: SizedBox(
                           //color: Colors.green,
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -214,7 +222,7 @@ class _LoginState extends State<Login> {
                             },
                             child: Ink(
                               color: ColorSelect.white,
-                              child: Container( 
+                              child: Container(
                                 margin: const EdgeInsets.only(left: 18),
                                 child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,

@@ -59,25 +59,22 @@ class _RegisterState extends State<Register> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 100),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/basic_market_logo.png',
-                          fit: BoxFit.fill,
-                          //width: 200,
-                          height: 80,
-                        ),
-                        //const Padding(padding: EdgeInsets.only(top: 10)),
-                        Text(
-                          'Registro',
-                          style: _textStyle(bold: false, size: 30, numColor: 1),
-                        )
-                      ],
-                    ),
+                Container(
+                  margin: const EdgeInsets.only(top: 100),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/basic_market_logo.png',
+                        fit: BoxFit.fill,
+                        //width: 200,
+                        height: 80,
+                      ),
+                      //const Padding(padding: EdgeInsets.only(top: 10)),
+                      Text(
+                        'Registro',
+                        style: _textStyle(bold: false, size: 30, numColor: 1),
+                      )
+                    ],
                   ),
                 ),
                 Expanded(
@@ -86,7 +83,7 @@ class _RegisterState extends State<Register> {
                     //color: Colors.amber,
                     margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
                     width: MediaQuery.of(context).size.width * 0.85,
-                    height: 272,
+                    height: MediaQuery.of(context).size.height,
                     child: Column(
                       children: [
                         _textField(field: 'Correo electrónico'),
@@ -214,7 +211,14 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                         ),
-                        //const Padding(padding: EdgeInsets.only(top: 15)),
+                        Container(
+                          margin: const EdgeInsets.only(top: 30),
+                          child: Text(
+                            'O continue con',
+                            style:
+                                _textStyle(bold: false, size: 20, numColor: 3),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -224,13 +228,15 @@ class _RegisterState extends State<Register> {
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Column(
                     children: [
-                      Text(
-                        'O continue con',
-                        style: _textStyle(bold: false, size: 20, numColor: 3),
-                      ),
+                      // Text(
+                      //   'O continue con',
+                      //   style: _textStyle(bold: false, size: 20, numColor: 3),
+                      // ),
                       //const Padding(padding: EdgeInsets.only(top: 15)),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1.0, color: ColorSelect.grey1)),
                         child: SizedBox(
                           //color: Colors.green,
                           width: MediaQuery.of(context).size.width * 0.5,
@@ -284,7 +290,7 @@ class _RegisterState extends State<Register> {
                                       width: 35,
                                       height: 35,
                                     ), // <-- Use 'Image.asset(...)' here
-                                    const SizedBox(width: 30 ),
+                                    const SizedBox(width: 30),
                                     Text('Google',
                                         style: _textStyle(
                                             bold: false,

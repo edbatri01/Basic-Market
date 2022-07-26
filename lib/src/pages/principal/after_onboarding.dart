@@ -63,7 +63,10 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                   child: Column(
                     children: [
                       //const Padding(padding: EdgeInsets.only(top: 15)),
-                      SizedBox(
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1.0, color: ColorSelect.grey1)),
                         //color: Colors.green,
                         width: MediaQuery.of(context).size.width * 0.75,
                         height: MediaQuery.of(context).size.height * 0.06,

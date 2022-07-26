@@ -18,7 +18,7 @@ class CardBM extends StatefulWidget {
 
 Future<Products> getProducts() async {
   final resp = await http.get(
-    Uri.parse('http://44.207.133.148/getProducts'),
+    Uri.parse('http://apibmbalancer-1997433991.us-east-1.elb.amazonaws.com/getProducts'),
     //headers: {"Content-Type": "application/json"},
   );
   // print(resp.body);

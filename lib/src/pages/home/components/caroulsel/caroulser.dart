@@ -16,7 +16,7 @@ class Caroulser extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
         options: CarouselOptions(
-          height: 270,
+          height: 200,
           aspectRatio: 16 / 9,
           viewportFraction: 0.8,
           initialPage: 0,

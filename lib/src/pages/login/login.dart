@@ -86,12 +86,13 @@ class _LoginState extends State<Login> {
                   flex: 1,
                   child: Container(
                     //color: Colors.amber,
-                    margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+                    margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
                     width: MediaQuery.of(context).size.width,
                     height: 268,
                     child: Column(
                       children: [
-                        _textField(field: 'Correo electrónico'),
+                        Container(
+                            child: _textField(field: 'Correo electrónico')),
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: _textFieldPassword(field: 'Contraseña'),
@@ -153,7 +154,8 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 30),
+                          //color: Colors.amberAccent,
+                          margin: const EdgeInsets.only(top: 25),
                           child: Text(
                             'O continue con',
                             style:
@@ -168,7 +170,7 @@ class _LoginState extends State<Login> {
                 //const Padding(padding: EdgeInsets.only(top: 3)),
                 Container(
                   //color: Colors.red,
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 1),
                   child: Column(
                     children: [
                       // Text(

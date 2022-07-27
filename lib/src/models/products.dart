@@ -46,9 +46,9 @@ class Item {
     factory Item.fromJson(Map<String, dynamic> json) => Item(
         code: json["code"],
         id: json["id"],
-        idCategory: json["id_category"] == null ? null : json["id_category"],
+        idCategory: json["id_category"],
         name: json["name"],
-        shopId: json["shop_id"] == null ? null : json["shop_id"],
+        shopId: json["shop_id"],
         status: json["status"],
         urlImage: json["url_image"],
     );
@@ -56,9 +56,9 @@ class Item {
     Map<String, dynamic> toJson() => {
         "code": code,
         "id": id,
-        "id_category": idCategory == null ? null : idCategory,
+        "id_category": idCategory,
         "name": name,
-        "shop_id": shopId == null ? null : shopId,
+        "shop_id": shopId,
         "status": status,
         "url_image": urlImage,
     };

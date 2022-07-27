@@ -60,7 +60,7 @@ class _RegisterState extends State<Register> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 100),
+                  margin: const EdgeInsets.only(top: 75),
                   child: Column(
                     children: [
                       Image.asset(
@@ -225,7 +225,7 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(
                   //color: Colors.red,
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 1),
                   child: Column(
                     children: [
                       // Text(
@@ -234,6 +234,7 @@ class _RegisterState extends State<Register> {
                       // ),
                       //const Padding(padding: EdgeInsets.only(top: 15)),
                       Container(
+                        // color: Colors.amberAccent,
                         decoration: BoxDecoration(
                             border: Border.all(
                                 width: 1.0, color: ColorSelect.grey1)),
@@ -331,8 +332,13 @@ class _RegisterState extends State<Register> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text('Algo salio mal'),
-                                          content: const Text(
-                                              'No fue posible autenticar'),
+                                          content: Text(
+                                            'No fue posible autenticar',
+                                            style: _textStyle(
+                                                bold: true,
+                                                size: 20,
+                                                numColor: 1),
+                                          ),
                                           actions: [
                                             TextButton(
                                                 onPressed: () {

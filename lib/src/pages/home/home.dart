@@ -131,7 +131,7 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.search, color: ColorSelect.white),
             onPressed: () {
               showSearch(context: context, delegate: searchProduct());
-              setState(() {});
+              // setState(() {});
             },
           ),
         ),

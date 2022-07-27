@@ -156,8 +156,13 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text('Algo salio mal'),
-                                        content: const Text(
-                                            'No fue posible autenticar'),
+                                        content: Text(
+                                          e.toString(),
+                                          style: _textStyle(
+                                              bold: true,
+                                              size: 20,
+                                              numColor: 1),
+                                        ),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
@@ -199,6 +204,7 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
                       ),
 
                       Container(
+                        //color: Colors.red,
                         margin: const EdgeInsets.only(top: 60),
                         child: Text(
                           'También puede',
@@ -212,7 +218,7 @@ class _AfterOnBoarding extends State<AfterOnBoarding> {
               ),
               Container(
                 //color: Colors.amber,
-                margin: const EdgeInsets.only(top: 50, left: 25, right: 25),
+                margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.11,
                 child: Column(

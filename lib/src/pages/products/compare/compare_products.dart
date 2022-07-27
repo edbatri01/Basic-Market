@@ -6,6 +6,8 @@ import 'package:basic_market/src/pages/products/compare/cardsCompair/card_compai
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
 
+import '../../search/searche_delegate.dart';
+
 class CompareProducts extends StatefulWidget {
   final int id;
   final String url;
@@ -168,7 +170,10 @@ class _CompareProductsState extends State<CompareProducts> {
               color: ColorSelect.blue1),
           child: IconButton(
             icon: const Icon(Icons.search, color: ColorSelect.white),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(context: context, delegate: searchProduct());
+              setState(() {});
+            },
           ),
         ),
         border: OutlineInputBorder(
@@ -178,6 +183,10 @@ class _CompareProductsState extends State<CompareProducts> {
         //borderRadius: BorderRadius.all(Radius.circular(15))),
         hintText: field,
       ),
+      
+      onTap: () {
+        showSearch(context: context, delegate: searchProduct());
+      },
     );
   }
 

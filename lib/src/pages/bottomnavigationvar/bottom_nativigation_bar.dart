@@ -1,3 +1,4 @@
+import 'package:basic_market/src/pages/listas_pages.dart';
 import 'package:basic_market/src/pages/principal/after_onboarding.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,7 @@ import '../../../services/firebase_service.dart';
 import '../home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// ignore: must_be_immutable
 class BottomNativigationBarClass extends StatelessWidget {
   BottomNativigationBarClass({Key? key}) : super(key: key);
   final User? user = FirebaseAuth.instance.currentUser;
@@ -22,7 +24,7 @@ class BottomNativigationBarClass extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const Home(),
@@ -38,7 +40,10 @@ class BottomNativigationBarClass extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => listas_page()));
+              },
               child: Image.asset(
                 'assets/images/car.png',
                 width: 40,

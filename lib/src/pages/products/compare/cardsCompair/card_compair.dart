@@ -7,6 +7,7 @@ import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter/material.dart';
 import 'package:counter_button/counter_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CardCompair extends StatefulWidget {
   final int id;
@@ -21,7 +22,8 @@ class _CardCompairState extends State<CardCompair> {
 
   Future<ProductsByShop> getProductsByShop() async {
     final resp = await http.post(
-        Uri.parse('http://apibmbalancer-1997433991.us-east-1.elb.amazonaws.com/filterPriceByshop'),
+        Uri.parse(
+            'http://apibmbalancer-1997433991.us-east-1.elb.amazonaws.com/filterPriceByshop'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"id_product": id}));
     return productsByShopFromJson(resp.body);
@@ -88,6 +90,12 @@ class _ListProductsByShop extends StatefulWidget {
 }
 
 class _ListProductsByShopState extends State<_ListProductsByShop> {
+  final User? user = FirebaseAuth.instance.currentUser;
+  Future addProduct(url, producto) async {
+    final respuesta = await http.post(Uri.parse(url),
+        headers: {"Content-Type": "application/json"}, body: producto);
+  }
+
   // int _counterValue = 1;
   // int countAux = 1;
   // int isPressed = 0;
@@ -204,7 +212,41 @@ class _ListProductsByShopState extends State<_ListProductsByShop> {
                         Container(
                           margin: const EdgeInsets.only(right: 15),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                String id = user!.uid;
+                                final resp = await http.get(Uri.http(
+                                    "listas-lb2-1279206548.us-east-1.elb.amazonaws.com",
+                                    "/list/list-active/$id"));
+
+                                if (resp.contentLength! > 0) {
+                                  print("si hay algo en el body");
+
+                                  final body = jsonDecode(resp.body);
+                                  print(body[0]['idlist_Products']);
+
+                                  int idList = body[0]['idlist_Products'];
+                                  print(widget.productsByShop[index].idProduct);
+                                  Map json = {
+                                    "product_id":
+                                        widget.productsByShop[index].idProduct,
+                                    "idlist_Products": idList,
+                                    "cantidad": 1
+                                  };
+                                  var producto = JsonEncoder().convert(json);
+                                  addProduct(
+                                      "http://listas-lb2-1279206548.us-east-1.elb.amazonaws.com/list-details/add",
+                                      producto);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Producto agregado a su lista activa')));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'Ups parece que no tienes una lista activa o no tienes listas agregadas')));
+                                }
+                              },
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       ColorSelect.aquaGreen),

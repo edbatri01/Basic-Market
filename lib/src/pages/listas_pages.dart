@@ -1,3 +1,4 @@
+import 'package:basic_market/src/pages/bottomnavigationvar/bottom_nativigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import 'package:basic_market/src/pages/listas_pages.dart';
 import 'dart:convert';
 import 'package:basic_market/src/models/listas.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class listas_page extends StatefulWidget {
   listas_page({Key? key}) : super(key: key);
@@ -16,34 +18,39 @@ class listas_page extends StatefulWidget {
 }
 
 class _listas_pageState extends State<listas_page> {
+  final User? user = FirebaseAuth.instance.currentUser;
   Future<List<Listas>> getlista() async {
-    const id = 2;
-    final resp =await http.get(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com", "/list/user/$id"));
+    String id = user!.uid;
+    final resp = await http.get(Uri.http(
+        "listas-lb2-1279206548.us-east-1.elb.amazonaws.com", "/list/user/$id"));
     return listasFromJson(resp.body);
   }
+
   Future<List<Listas>> getactivo() async {
-    const id = 2;
-    final resp =await http.get(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com", "/list/user-active/$id"));
+    String id = user!.uid;
+    final resp = await http.get(Uri.http(
+        "listas-lb2-1279206548.us-east-1.elb.amazonaws.com",
+        "/list/user-active/$id"));
     return listasFromJson(resp.body);
   }
-Future lista_new(url,lista) async {
-  const id = 2;
-  final resp =await http.put(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com", "/list/inactivo/$id"));
-    if(resp.statusCode==200){
-      final respuesta = await http.post(
-    Uri.parse(url),
-    headers: {"Content-Type": "application/json"},
-    body: lista
-  );
-  if (respuesta.statusCode == 201){
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => listas_page()),
-  );
+
+  Future lista_new(url, lista) async {
+    String id = user!.uid;
+    final resp = await http.put(Uri.http(
+        "listas-lb2-1279206548.us-east-1.elb.amazonaws.com",
+        "/list/inactivo/$id"));
+    if (resp.statusCode == 200 || resp.statusCode == 203) {
+      final respuesta = await http.post(Uri.parse(url),
+          headers: {"Content-Type": "application/json"}, body: lista);
+      if (respuesta.statusCode == 201) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => listas_page()),
+        );
+      }
     }
-  
   }
-}
+
   late TextEditingController _controller;
 
   @override
@@ -57,6 +64,7 @@ Future lista_new(url,lista) async {
     _controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -120,8 +128,10 @@ Future lista_new(url,lista) async {
                       future: getactivo(),
                       builder:
                           (BuildContext context, AsyncSnapshot<List> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return const Center(child: CircularProgressIndicator());
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
                         } else {
                           return encurso_list(snapshot.data!);
                         }
@@ -133,7 +143,8 @@ Future lista_new(url,lista) async {
                       future: getlista(),
                       builder:
                           (BuildContext context, AsyncSnapshot<List> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else {
                           return encurso_list(snapshot.data!);
@@ -155,14 +166,15 @@ Future lista_new(url,lista) async {
                               return AlertDialog(
                                 title: const Text('Nueva lista'),
                                 content: Container(
-                                  height:40,
+                                  height: 40,
                                   child: TextField(
-                                     controller: _controller,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    style: TextStyle(color: ColorSelect.black, fontSize: 18)
-                                  ),
+                                      controller: _controller,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      style: TextStyle(
+                                          color: ColorSelect.black,
+                                          fontSize: 18)),
                                 ),
                                 actions: <Widget>[
                                   TextButton(
@@ -171,14 +183,23 @@ Future lista_new(url,lista) async {
                                     child: const Text('Cancelar'),
                                   ),
                                   TextButton(
-                                    onPressed: (){
-                                        Map json = {
-                                          "name":_controller.text,
-                                          "user_id":2,
-                                          "activo":1
-                                       };
-                                       var lista = JsonEncoder().convert(json);
-                                       lista_new("http://listas-lb2-1279206548.us-east-1.elb.amazonaws.com/list/new",lista);
+                                    onPressed: () {
+                                      Map json = {
+                                        "name": _controller.text,
+                                        "user_id": user!.uid,
+                                        "activo": 1
+                                      };
+                                      var lista = JsonEncoder().convert(json);
+                                      String nameList =
+                                          _controller.text.toString();
+                                      lista_new(
+                                          "http://listas-lb2-1279206548.us-east-1.elb.amazonaws.com/list/new",
+                                          lista);
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  'Lista recien agregada se vuelve tu lista activa, esto significa que cuando agregues un producto se guardará en la lista $nameList')));
                                     },
                                     child: const Text('OK'),
                                   ),
@@ -196,7 +217,7 @@ Future lista_new(url,lista) async {
           ),
           Center(child: Text("Desabilitado")),
         ]),
-        bottomNavigationBar: bottom_navigation(),
+        bottomNavigationBar: BottomNativigationBarClass(),
       ),
     );
   }

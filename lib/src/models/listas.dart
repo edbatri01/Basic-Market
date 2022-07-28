@@ -3,8 +3,6 @@
 //     final listas = listasFromJson(jsonString);
 
 import 'dart:convert';
-import 'package:basic_market/src/models/list_details.dart';
-import 'package:http/http.dart' as http;
 
 List<Listas> listasFromJson(String str) => List<Listas>.from(json.decode(str).map((x) => Listas.fromJson(x)));
 
@@ -14,26 +12,30 @@ class Listas {
     Listas({
         this.idlistProducts,
         this.name,
-        this.userId,
         this.activo,
+        this.precioLista,
+        this.productosC,
     });
 
-    int? idlistProducts;
-    String? name;
-    String? userId;
-    int? activo;
+    int ?idlistProducts;
+    String ? name;
+    int ? activo;
+    double ? precioLista;
+    int ? productosC;
 
     factory Listas.fromJson(Map<String, dynamic> json) => Listas(
         idlistProducts: json["idlist_Products"],
         name: json["name"],
-        userId: json["user_id"],
         activo: json["activo"],
+        precioLista: json["precioLista"] == null ? null : json["precioLista"].toDouble(),
+        productosC: json["productosC"],
     );
 
     Map<String, dynamic> toJson() => {
         "idlist_Products": idlistProducts,
         "name": name,
-        "user_id": userId,
         "activo": activo,
+        "precioLista": precioLista == null ? null : precioLista,
+        "productosC": productosC,
     };
 }

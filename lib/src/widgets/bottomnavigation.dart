@@ -10,7 +10,7 @@ class bottom_navigation extends StatefulWidget {
 }
 
 class _bottom_navigationState extends State<bottom_navigation> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   // final pages =[
   //   home(),
   //   grocery()

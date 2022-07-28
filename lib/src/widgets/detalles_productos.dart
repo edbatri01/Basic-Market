@@ -1,29 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
-import 'package:basic_market/src/models/list_details.dart';
+import 'package:basic_market/src/pages/listas_pages.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:convert';
 
 
 class detalles_productos extends StatefulWidget {
   detalles_productos(this.lista);
   final List<dynamic> lista;
+  
   @override
   State<detalles_productos> createState() => _detalles_productosState();
 }
 
 class _detalles_productosState extends State<detalles_productos> {
-  int _cantidad = 1;
-  //Future <List<ListDetails>> _lista;
-  
+      int _cantidad = 1;
+      bool activo=false;
+  @override
+  void initState() {
+    super.initState();
+    
+  }
    void estado(_cantidad, precio) {
     double _subt=0;
     return _subt =_cantidad*precio;
   }
+  Future  delete(id) async{
+    final resp = await http.delete(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com","/list-details/delete/$id"));
+     if (resp.statusCode == 200){
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => listas_page()),
+  );
+     }
+  }
+  Future update(url,id,cantidad) async {
   
+  final respuesta = await http.put(
+    Uri.parse(url+"$id"),
+    headers: {"Content-Type": "application/json"},
+    body: cantidad
+  );
+  if (respuesta.statusCode == 200){
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => listas_page()),
+  );
+    }
+  
+ 
+}
   @override
   Widget build(BuildContext context) {
+      
     return ListView.builder(
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       itemCount: widget.lista.length,
       itemBuilder: (BuildContext context, int index) {
       return Container(
@@ -41,17 +74,20 @@ class _detalles_productosState extends State<detalles_productos> {
                       Container(
                         margin: EdgeInsets.only(bottom: 5),
                         padding: EdgeInsets.all(3),
-                        child: Text(widget.lista[index].idShop.toString(),
-                            style: TextStyle(color: ColorSelect.blue2)),
+                        child: 
+                       
+                        Text(widget.lista[index].tienda.toString(),
+                            style:const TextStyle(color: ColorSelect.blue2)),
                         decoration: BoxDecoration(
                             border: Border.all(color: ColorSelect.blue2),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(5))),
+                              const  BorderRadius.all(Radius.circular(5))),
                       ),
-                      Image.network(
-                  widget.lista[index].urlImage.toString(),
-                  width: 100,
-            
+                      CachedNetworkImage(
+                        imageUrl:"https://www.lala.com.mx/storage/app/uploads/public/619/53e/171/61953e17101d4577539015.png",
+                        width: 100,
+                        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
                 ),
                     ],
                   ),
@@ -65,7 +101,7 @@ class _detalles_productosState extends State<detalles_productos> {
                           children: [
                             Container(
                               width: 100,
-                              child: Text(widget.lista[index].productName.toString(),
+                              child: Text(widget.lista[index].name.toString(),
                                   textAlign: TextAlign.center),
                             ),
                             Expanded(
@@ -101,15 +137,15 @@ class _detalles_productosState extends State<detalles_productos> {
                                           Container(
                                             height: 31,
                                             width: 40,
-                                            decoration: BoxDecoration(
-                                                
+                                            decoration:const BoxDecoration(
+                  
                                                 color: ColorSelect.grey1),
-                                            child: Center(child: Text("$_cantidad"))
+                                            child: Center(child: Text( activo==false? widget.lista[index].cantidad.toString():"$_cantidad"))
                                             ),
                                           Container(
                                             height: 31,
                                             width: 40,
-                                            decoration: BoxDecoration(
+                                            decoration:const BoxDecoration(
                                                 borderRadius: BorderRadius.only(
                                                   topRight: Radius.circular(8),
                                                   bottomRight: Radius.circular(8),
@@ -118,6 +154,10 @@ class _detalles_productosState extends State<detalles_productos> {
                                             child: IconButton(
                                                 onPressed: () {
                                                   setState(() {
+                                                    if(activo==false){
+                                                    activo=true;
+                                                    _cantidad=widget.lista[index].cantidad;
+                                                    }
                                                     _cantidad += 1;
                                                   });
                                                 },
@@ -128,7 +168,13 @@ class _detalles_productosState extends State<detalles_productos> {
                                       ),
                                     ),
                                     
-                                    Expanded(child: Center(child: Text("Subtotal = \$ ",style: TextStyle(fontSize: 15))))
+                                    Expanded(child: Center(child: Row(
+                                      children: [
+                                        Text("Subtotal = \$ ",style: TextStyle(fontSize: 15)),
+                                        Text((widget.lista[index].cantidad*widget.lista[index].price).toString(),style: TextStyle(fontSize: 15)),
+                                         
+                                      ],
+                                    )))
                                   ],
                                 ),
                               ),
@@ -147,7 +193,15 @@ class _detalles_productosState extends State<detalles_productos> {
                               //padding: EdgeInsets.symmetric(vertical: 2,horizontal:10),
                               elevation: 0,
                               primary: ColorSelect.aquaGreen),
-                          onPressed: () {},
+                          onPressed: () {
+                            Map json = {
+                                         
+                                          "cantidad":_cantidad,
+
+                                       };
+                                       var cantidad = JsonEncoder().convert(json);
+                                      update("listas-lb2-1279206548.us-east-1.elb.amazonaws.com/list-details/update/",widget.lista[index].idListDetails,cantidad);
+                          },
                           child: Text('Actualizar'),
                         ),
                         SizedBox(width: 20),
@@ -159,7 +213,9 @@ class _detalles_productosState extends State<detalles_productos> {
                             side:
                                 BorderSide(width: 2, color: ColorSelect.black),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            delete(widget.lista[index].idListDetails);
+                          },
                           child: Text('Eliminar',
                               style: TextStyle(color: ColorSelect.black)),
                         )

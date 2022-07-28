@@ -1,6 +1,9 @@
 import 'package:basic_market/src/onboarding/onboarding_0.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:basic_market/src/pages/lista_detalles.dart';
+import 'package:basic_market/src/pages/listas_pages.dart';
+import 'package:basic_market/src/onboarding/onboarding_0.dart';
 
 void main() => runApp(const MyApp());
 
@@ -25,9 +28,9 @@ class MyApp extends StatelessWidget {
       initialRoute: 'initialHeader',
       
       routes: {
-        'initialHeader': (BuildContext context)=> onboard_0(),
+        'initialHeader': (BuildContext context)=> listas_page(),
 
-      },
+      }, 
     );
   }
 }

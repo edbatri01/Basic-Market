@@ -3,24 +3,35 @@ import 'package:basic_market/src/styles/colors_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:basic_market/src/widgets/bottomnavigation.dart';
 import 'package:basic_market/src/widgets/detalles_productos.dart';
+import 'package:basic_market/src/pages/direcciones_page.dart';
 
 import 'package:basic_market/src/models/list_details.dart';
+import 'package:basic_market/src/models/direcciones.dart';
 import 'package:http/http.dart' as http;
 
 class lista_detalles extends StatefulWidget {
-  lista_detalles({Key? key}) : super(key: key);
-
+  lista_detalles({Key? key,required this.id,  required this.lista,required this.total,  required this.cantidad}) : super(key: key);
+  String? id;
+  String? lista;
+  String? total;
+  String? cantidad;
   @override
-  State<lista_detalles> createState() => _lista_detallesState();
+  State<lista_detalles> createState() => _lista_detallesState(id:id!,lista:lista,total:total!,cantidad:cantidad!);
 }
 
 class _lista_detallesState extends State<lista_detalles> {
+  _lista_detallesState({required this.id, required this.lista,required this.total,  required this.cantidad});
+  String? id;
+  String? lista;
+  String? total;
+  String? cantidad;
+  String? direccion;
   bool _activo = false;
   late TextEditingController _controller;
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: 'Fiesta enero');
+    _controller = TextEditingController(text: lista);
   }
 
   @override
@@ -30,15 +41,24 @@ class _lista_detallesState extends State<lista_detalles> {
   }
 
   void estado() {
-    
     setState(() {
       _activo == false ? _activo = true : _activo = false;
     });
   }
-  Future <List<ListDetails>> getlista() async{
-    final resp = await http.get(Uri.http("192.168.89.81:3000","/list-details/2"));
-    return listDetailsFromJson(resp.body);
+  Future <List<Detallesproductos>> getlista() async{
+
+    final resp = await http.get(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com","/list-details/products/$id"));
+    print(resp);
+    return detallesproductosFromJson(resp.body);
   }
+  Future <List<Direcciones>> getDireccion() async{
+    const id_direccion=2;
+    final resp = await http.get(Uri.http("listas-lb2-1279206548.us-east-1.elb.amazonaws.com","/list-details/products/$id_direccion"));
+    return direccionesFromJson(resp.body);
+  }
+ 
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +70,7 @@ class _lista_detallesState extends State<lista_detalles> {
             color: ColorSelect.grey2,
             icon: SvgPicture.asset('assets/icons/navigate_before.svg'),
             onPressed: () {
-              //Navigation.pop();
+              Navigator.pop(context);
             },
           ),
         ),
@@ -60,41 +80,47 @@ class _lista_detallesState extends State<lista_detalles> {
             color: ColorSelect.grey2,
           ),
         ),
-        actions: <Widget>[
-          Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(0),
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: ColorSelect.blue1),
-            child: IconButton(
-              icon: SvgPicture.asset(
-                'assets/icons/search.svg',
-                height: 50,
-                width: 50,
-              ),
-              //tooltip: 'Go to the next page',
-              onPressed: () {},
-            ),
-          ),
-        ],
+        // actions: <Widget>[
+        //   Container(
+        //     margin: const EdgeInsets.all(5),
+        //     padding: const EdgeInsets.all(0),
+        //     decoration: const BoxDecoration(
+        //         borderRadius: BorderRadius.all(Radius.circular(10)),
+        //         color: ColorSelect.blue1),
+        //     child: IconButton(
+        //       icon: SvgPicture.asset(
+        //         'assets/icons/search.svg',
+        //         height: 50,
+        //         width: 50,
+        //       ),
+        //       //tooltip: 'Go to the next page',
+        //       onPressed: () {},
+        //     ),
+        //   ),
+        // ],
         bottom: PreferredSize(
-          preferredSize: Size(double.infinity, 40),
+          preferredSize: const Size(double.infinity, 40),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: TextButton(
               child: Row(
-                children: [
-                  Icon(Icons.location_on, size: 15),
-                  Text("Tu destino")
+                children:const [
+                  Icon(Icons.location_on, size: 15,color: ColorSelect.grey2,),
+                  Text("Direcciones", style: TextStyle(color: ColorSelect.grey2))
                 ],
               ),
-              onPressed: null,
+              onPressed: (){
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => direcciones_page()));
+              },
             ),
           ),
         ),
       ),
-      body: Padding(
+      body: 
+      Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Column(
           children: [
@@ -145,7 +171,7 @@ class _lista_detallesState extends State<lista_detalles> {
               ],
             ),
             Container(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery.of(context).size.height*0.55,
               width: MediaQuery.of(context).size.width,
               child: FutureBuilder(
                         future: getlista(),
@@ -153,13 +179,63 @@ class _lista_detallesState extends State<lista_detalles> {
                             AsyncSnapshot<List> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const Center(child: CircularProgressIndicator());
                           } else {
                             return detalles_productos(snapshot.data!);
                           }
                         }),
             ),
-            
+            Container(
+              child:Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal:10),
+                child: Column(
+                  
+                  children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:[
+                    Column(
+                      children: [
+                      const Text("Total a pagar:", style: TextStyle(color: ColorSelect.grey2, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(total=="null"?
+                      "0":"$total"
+                      , style: TextStyle(color: ColorSelect.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                    ],),
+                    Column(children: [
+                      Text("Productos:", style: TextStyle(color: ColorSelect.grey2, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text("$cantidad", style: TextStyle(color: ColorSelect.black, fontWeight: FontWeight.bold, fontSize: 18)),
+                    ],)
+                  ]),
+                  Container(
+                    width: 340,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            
+                            primary: ColorSelect.blue2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7))
+                            ),
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (_) => lista_detalles(
+                                    
+                          //           )));
+                        },
+                        child: Text('Continuar para pagar',style: TextStyle(fontSize:15)),
+                      ),
+                  )
+                  ,
+                ],),
+              )
+            )
           ],
         ),
       ),

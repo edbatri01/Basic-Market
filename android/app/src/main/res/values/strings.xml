@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basic Market</string>
+    <string name="facebook_app_id">739382017341650</string>
+    <string name="fb_login_protocol_scheme">fb739382017341650</string>
+    <string name="facebook_client_token">33e55b7166e7a39cffb5807faf961cf6</string>
+</resources>
+

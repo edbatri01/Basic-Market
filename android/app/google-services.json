@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "983599332890",
+    "firebase_url": "https://basic-market-default-rtdb.firebaseio.com",
+    "project_id": "basic-market",
+    "storage_bucket": "basic-market.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983599332890:android:fdd7c61da021e65c645ba3",
+        "android_client_info": {
+          "package_name": "com.ballinas.basic_market"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983599332890-p5q8da0tsm7ds7ggkqpte0s5p42jhc4j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ballinas.basic_market",
+            "certificate_hash": "54fa1eeef59ec416bd71e9f58b65ca0a79031348"
+          }
+        },
+        {
+          "client_id": "983599332890-r05gkgd92gb0kgghbd4tspub86oraej0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2h4_4eQ9V6HBbLMBvQovCuO4hwTQCy9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983599332890-r05gkgd92gb0kgghbd4tspub86oraej0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

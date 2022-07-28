@@ -1,4 +1,5 @@
 
+import 'package:basic_market/src/pages/principal/after_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:basic_market/src/styles/colors_view.dart';
@@ -22,9 +23,9 @@ class _onboard_4State extends State<onboard_4> {
               children: [
                 Container(alignment: Alignment.bottomCenter,child: SvgPicture.asset('assets/svg/Frame_2.svg')),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal:110),
+                  margin: const EdgeInsets.symmetric(horizontal:110),
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 17),
+                  padding: const EdgeInsets.only(bottom: 17),
                   child:Image.asset('assets/svg/trolley_grocery.png'),)
                 
               ],
@@ -49,7 +50,7 @@ class _onboard_4State extends State<onboard_4> {
                                ),
                                Expanded(
                                  child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal:45),
+                                  padding: const EdgeInsets.symmetric(horizontal:45),
                                   child: const Text('Nuestro trabajo hacer entrega de tus compras de diferentes tiendas y supermercados facil, comodo y ahorrando dinero.',style: TextStyle(color: ColorSelect.grey2,fontSize:15), textAlign: TextAlign.center,)),
                                ),
                                Expanded(child:
@@ -67,8 +68,13 @@ class _onboard_4State extends State<onboard_4> {
                                             // shadowColor: Colors.transparent,
                                             //make color or elevated button transparent
                                         ),
-                                          onPressed: () { },
-                                          child: Text('Empezar'),
+                                          onPressed: () {
+                                            Navigator.pushReplacement(
+                                              context, 
+                                              MaterialPageRoute(builder: (context) => const AfterOnBoarding())
+                                            );
+                                           },
+                                          child: const Text('Empezar'),
                                         ),
                                       
                                    ),

@@ -4,7 +4,10 @@ import 'package:basic_market/src/pages/register/register.dart';
 //import 'package:basic_market/src/pages/register/register.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
+import 'package:basic_market/src/pages/lista_detalles.dart';
+import 'package:basic_market/src/pages/listas_pages.dart';
+import 'package:basic_market/src/onboarding/onboarding_0.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +38,8 @@ class MyApp extends StatelessWidget {
           )),
       initialRoute: 'initialHeader',
       routes: {
-        'initialHeader': (BuildContext context) => const Register(),
+        'initialHeader': (BuildContext context)=> onboard_0(),
+
       },
     );
   }

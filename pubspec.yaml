@@ -27,6 +27,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+
+  cached_network_image: ^3.2.1
   flutter:
     sdk: flutter
   flutter_svg: ^1.1.0
@@ -45,6 +47,7 @@ dependencies:
   counter_button: ^1.0.1
   http: ^0.13.4
   email_validator: ^2.0.1
+  ui_helper: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -74,8 +77,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/svg/
+      - assets/
+      - assets/svg/
+      - assets/icons/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       initialRoute: 'initialHeader',
       
       routes: {
-        'initialHeader': (BuildContext context)=> listas_page(),
+        'initialHeader': (BuildContext context)=> onboard_0(),
 
-      }, 
+      },
     );
   }
 }
